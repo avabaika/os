@@ -12,6 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4    # grab the commit for this tag
 
+      # Debug: List files in the lab directory
+      - name: List files in lab directory
+        run: |
+          echo "Files in labs/${{ github.ref_name }}:"
+          ls -la labs/${{ github.ref_name }}/
+          echo "All files recursively:"
+          find labs/${{ github.ref_name }} -type f
+
       # Create the release + upload every file in labs/<tag>/ as assets
       - uses: softprops/action-gh-release@v1
         with:
@@ -19,4 +27,4 @@ jobs:
           name:      ${{ github.ref_name }}         # Visible title
           generate_release_notes: true
           files: |
-            labs/${{ github.ref_name }}/*           # glob picks up every file
+            labs/${{ github.ref_name }}/**/*        # recursive glob
